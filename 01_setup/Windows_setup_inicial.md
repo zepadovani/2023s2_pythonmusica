@@ -143,14 +143,22 @@ Para um guia em vídeo sobre como instalar e configurar o Visual Studio, ver (ig
 
 2. Procure pelo link `Advanced system settings` / `Configurações avançadas de sistema`:
    
-   ![Alt text](environment_vairables_system_about.png)
+   ![Advanced System Settings](environment_vairables_system_about.png)
 
 3. Clique no botão `Environment variables` / `Variáveis de ambiente`
+
+    ![Environment Variables](environment_vairables_2.png)
    
 4. Selecione a linha `Path` nas variáveis do seu usuário e clique em `Edit` / `Editar`
+   
+   ![Path / Edit](environment_vairables_Path_edit.png)
 
 5. Clique em novo para adicionar um novo caminho
 
+    ![New](environment_vairables_Path_edit-new.png)
+
 6. Busque pelo diretório onde ficam os binários do LilyPond, usualmente em `C:\Program Files(x86)\LilyPond\usr\bin`
+
+    ![Browsw](environment_vairables_Path_edit-new-browse.png)
 
 7. Repita o processo e busque pelo diretório onde ficam os binários do Musescore, usualmente em `C:\Program Files\MuseScore 4\bin`

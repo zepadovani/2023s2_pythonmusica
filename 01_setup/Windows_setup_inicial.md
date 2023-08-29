@@ -159,6 +159,107 @@ Para um guia em vídeo sobre como instalar e configurar o Visual Studio, ver (ig
 
 6. Busque pelo diretório onde ficam os binários do LilyPond, usualmente em `C:\Program Files(x86)\LilyPond\usr\bin`
 
-    ![Browsw](environment_vairables_Path_edit-new-browse.png)
+    ![Browse](environment_vairables_Path_edit-new-browse.png)
 
 7. Repita o processo e busque pelo diretório onde ficam os binários do Musescore, usualmente em `C:\Program Files\MuseScore 4\bin`
+
+
+### 7. Abjad - configuração e teste
+
+**IMPORTANTE** Antes de tudo, tenha certeza que você já instalou o `Abjad` no seu ambiente (ver passo 3.8, acima!)
+
+1. Abra o Visual Studio Code e abra/crie uma pasta de trabalha na aba lateral:
+
+![New Folder VS Code](vscode_open_folder.png)
+
+2. Em `Arquivo`/`Novo Arquivo` ( `File/New File`), crie um novo arquivo do tipo Jupyter Notebook:
+
+![New File](vscode_new_file.png)
+
+3. Selecione o kernel / ambiente em que você está trabalhando. No nosso exemplo, aquele chamado `pythonmusica-3.11.4`:
+
+![Select Kernel](vscode_kernel_select.png)
+
+4. Vamos rodar um pequeno código que gera uma partitura, com o `Abjad`+`LilyPond`. Isso também servirá para inicializar o arquivo de configuração do `Abjad`, que precisaremos ajustar para a configuração do computador em que estamos trabalhando:
+
+![Test Abjad](abjad_test.png)
+
+5. Após rodar esse comando, vamos procurar por um arquivo de configuração criado pelo `Abjad`. Esse arquivo fica em uma pasta oculta localizada na pasta do seu usuário no Windows. Para facilitar o processo de editar esse arquivo, usaremos o PowerShell:
+
+    5.1 Abra o Powershell e digite as linhas abaixo:
+
+    ```
+    cd
+    code .\.abjad\abjad.cfg
+    ```
+    
+    OBS: se o VS te perguntar se confia no autor da pasta, diga que sim.
+
+    5.2 Na linha iniciada em `lilypond_path`, substitua a parte à direita do sinal `=` pelo caminho completo do executável do LilyPond (em algumas máquinas as bibliotecas que vamos usar -- especialmente o `SCAMP` só funcionam assim)
+    
+    ```
+    lilypond_path = "C:\Program Files (x86)\LilyPond\usr\bin\lilypond.exe"
+    ```
+    
+    5.3 Nesse arquivo você também poderá configurar outros aplicativos padrão utilizados pelo `Abjad` para tocar arquivos midi, visualizar pdfs, etc. Também é possível especificar em qual pasta os pdfs de teste (não salvos diretamente em alguma pasta específica) serão salvos. Não vamos configurar isso agora, mas é importante que você saiba para que serve esse arquivo e seja capaz de ajustá-lo quando precisar.
+
+6. Voltando à pasta de trabalho do `Abjad`, reinicie o kernel....
+   
+![Abjad Restart Kernel](abjad_restart_kernel.png)
+
+7.   ...e execute novamente o bloco de teste do `Abjad`. Deve aparecer um pdf, no seu leitor padrão de pdfs, com a partitura gerada:
+
+![Abjad Note](abjad_note.png)
+
+### 8. SCAMP - configuração e teste
+
+1. No VS Code, abra o terminal utilizando o menu (`View/Terminal` ou `Visualizar/Terminal`) ou usando o atalho `Ctrl+'` 
+
+2. Mude para o *environment* que está trabalhando usando o código abaixo, no nosso exemplo `pythonmusica-3.11.4`
+
+   ```
+   conda activate pythonmusica-3.11.4
+   ```
+
+3. Instale o SCAMP (é recomendado fazer isso apenas após a etapa de teste/configuração do `Abjad`, que fizemos anteriormente):
+
+   ```
+   pip install scamp
+   ```
+
+4. De volta ao seu notebook, na parte superior da tela, rode o seguinte bloco de código em uma nova célula:
+
+   ```
+   from scamp import test_run
+   test_run.play(show_lilypond=True)
+   ```
+
+   Se tudo der certo, você ouvirá as notas de piano e, quando terminado o áudio, será gerada a partitura, que você visualizará no seu leitor padrão de pdf.
+
+
+### 9. music21 - instalação e teste
+
+**IMPORTANTE** Antes de tudo, tenha certeza que você já instalou o `music21` no seu ambiente (ver passo 3.8, acima!)
+
+1. Primeiramente vamos configurar `music21` para encontrar o `MuseScore 4`, que ele utilizará para gerar partituras em formato xml.
+   
+   Rode, em uma nova célula do seu notebook, o comando abaixo:
+
+```
+import music21 as m21
+
+m21set = m21.environment.UserSettings()
+m21set['musicxmlPath'] = 'C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe'
+m21set['musescoreDirectPNGPath'] = 'C:\\Program Files\\MuseScore 4\\bin\\MuseScore4.exe'
+m21set['musicxmlPath']
+```
+
+2. Em seguida, vamos testar gerando, novamente, apenas uma nota (deve aparecer, no próprio notebook, a imagem de uma partitura):
+   
+```
+n = m21.note.Note("F5")
+n.show()
+```
+
+![Music21 Note](m21_note.png)
+
